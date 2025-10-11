@@ -1,0 +1,15 @@
+/* style.css */
+.table-view {
+    -fx-font-size: 14px;
+    -fx-background-color: #f0f0f0;
+}
+
+.table-column-header {
+    -fx-background-color: #2e8b57;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell:filled:selected {
+    -fx-background-color: #387D3D;
+}

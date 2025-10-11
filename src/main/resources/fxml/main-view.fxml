@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="br.prefeitura.consulta_alunos.controller.MainController" alignment="TOP_CENTER" style="-fx-padding: 15;">
+    <HBox spacing="10">
+        <Button text="Selecionar Pasta" onAction="#selecionarPasta"/>
+        <TextField fx:id="campoBusca" promptText="Buscar aluno por nome, turma ou responsável..." onKeyReleased="#filtrarAlunos" HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <TableView fx:id="tabelaAlunos" prefHeight="500">
+        <columns>
+            <TableColumn text="Matrícula" fx:id="colMatricula" prefWidth="100"/>
+            <TableColumn text="Nome" fx:id="colNome" prefWidth="180"/>
+            <TableColumn text="Turma" fx:id="colTurma" prefWidth="120"/>
+            <TableColumn text="Idade" fx:id="colIdade" prefWidth="60"/>
+            <TableColumn text="Telefone" fx:id="colTelefone" prefWidth="120"/>
+            <TableColumn text="Email" fx:id="colEmail" prefWidth="200"/>
+        </columns>
+    </TableView>
+</VBox>

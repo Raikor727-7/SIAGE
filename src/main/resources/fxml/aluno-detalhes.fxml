@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="br.prefeitura.consulta_alunos.controller.AlunoDetalhesController" style="-fx-padding: 15;">
+    <Label text="Boletim Escolar" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="10" vgap="8">
+        <Label text="Nome:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <Label fx:id="lblNome" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Matrícula:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <Label fx:id="lblMatricula" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Turma:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <Label fx:id="lblTurma" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Total de Faltas:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <Label fx:id="lblFaltas" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <TableView fx:id="tabelaBoletim" prefHeight="250">
+        <columns>
+            <TableColumn fx:id="colDisciplina" text="Disciplina" prefWidth="200"/>
+            <TableColumn fx:id="colB1" text="1º Bim" prefWidth="80"/>
+            <TableColumn fx:id="colB2" text="2º Bim" prefWidth="80"/>
+            <TableColumn fx:id="colB3" text="3º Bim" prefWidth="80"/>
+            <TableColumn fx:id="colB4" text="4º Bim" prefWidth="80"/>
+            <TableColumn fx:id="colMedia" text="Média Final" prefWidth="100"/>
+            <TableColumn fx:id="colSituacao" text="Situação" prefWidth="120"/>
+        </columns>
+    </TableView>
+
+    <Button text="Fechar" onAction="#fecharJanela" alignment="CENTER"/>
+</VBox>
