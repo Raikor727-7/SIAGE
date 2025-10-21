@@ -4,18 +4,26 @@
 
 <VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="br.prefeitura.consulta_alunos.controller.MainController" alignment="TOP_CENTER" style="-fx-padding: 15;">
     <HBox spacing="10">
-        <Button text="Selecionar Pasta" onAction="#selecionarPasta"/>
-        <TextField fx:id="campoBusca" promptText="Buscar aluno por nome, turma ou responsável..." onKeyReleased="#filtrarAlunos" HBox.hgrow="ALWAYS"/>
+        <Button text="Selecionar Arquivo Excel" onAction="#selecionarArquivo"/>
+        <TextField fx:id="campoBusca" promptText="Buscar aluno por nome..." onKeyReleased="#filtrarAlunos" HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <ComboBox fx:id="comboCaixa" promptText="Filtrar por caixa" onAction="#filtrarPorCaixa"/>
+        <ComboBox fx:id="comboAno" promptText="Filtrar por ano" onAction="#filtrarPorAno"/>
+        <Button text="Limpar Filtros" onAction="#limparFiltros"/>
     </HBox>
 
     <TableView fx:id="tabelaAlunos" prefHeight="500">
         <columns>
-            <TableColumn text="Matrícula" fx:id="colMatricula" prefWidth="100"/>
-            <TableColumn text="Nome" fx:id="colNome" prefWidth="180"/>
-            <TableColumn text="Turma" fx:id="colTurma" prefWidth="120"/>
-            <TableColumn text="Idade" fx:id="colIdade" prefWidth="60"/>
-            <TableColumn text="Telefone" fx:id="colTelefone" prefWidth="120"/>
-            <TableColumn text="Email" fx:id="colEmail" prefWidth="200"/>
+            <TableColumn text="Nome" fx:id="colNome" prefWidth="250"/>
+            <TableColumn text="Data Nascimento" fx:id="colDataNascimento" prefWidth="120"/>
+            <TableColumn text="Idade Atual" fx:id="colIdade" prefWidth="80"/>
+            <TableColumn text="Caixa/Arquivo" fx:id="colCaixa" prefWidth="150"/>
+            <TableColumn text="Ano Referência" fx:id="colAno" prefWidth="100"/>
+            <TableColumn text="Situação" fx:id="colSituacao" prefWidth="120"/>
         </columns>
     </TableView>
+
+    <Label fx:id="labelInfo" text="Selecione um arquivo Excel para carregar os dados históricos"/>
 </VBox>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="br.prefeitura.consulta_alunos.controller.CaixaController"
+      spacing="10" style="-fx-padding: 15;">
+
+    <Label text="📦 SIAGE - Controle de Caixas de Documentos" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button text="📥 Importar Planilha" onAction="#importarPlanilha"
+                style="-fx-background-color: #9C27B0; -fx-text-fill: white;"/>
+        <Label text="Buscar Aluno:"/>
+        <TextField fx:id="campoBusca" promptText="Digite o nome do aluno..." HBox.hgrow="ALWAYS"/>
+        <Label text="Filtrar Caixa:"/>
+        <TextField fx:id="campoFiltroCaixa" promptText="Número da caixa..." prefWidth="120"/>
+        <Button text="🔍 Aplicar Filtros" onAction="#listarPorCaixa"/>
+    </HBox>
+
+    <Label fx:id="lblEstatisticas" style="-fx-font-weight: bold; -fx-text-fill: #2E7D32;"/>
+
+    <TableView fx:id="tabelaResultados" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colNome" text="Nome" prefWidth="200"/>
+            <TableColumn fx:id="colSerie" text="Série" prefWidth="100"/>
+            <TableColumn fx:id="colCaixa" text="Caixa" prefWidth="100"/>
+            <TableColumn fx:id="colObservacoes" text="Observações" prefWidth="250"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="✏️ Editar Caixa" onAction="#editarCaixa" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+        <Button text="➕ Adicionar Aluno" onAction="#adicionarAluno" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+        <Button text="💾 Exportar Backup" onAction="#exportarBackup" style="-fx-background-color: #FF9800; -fx-text-fill: white;"/>
+    </HBox>
+
+</VBox>
