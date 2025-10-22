@@ -2,6 +2,7 @@ package br.prefeitura.consulta_alunos.controller;
 
 import br.prefeitura.consulta_alunos.model.AlunoHistorico;
 import br.prefeitura.consulta_alunos.service.AlunoHistoricoService;
+import br.prefeitura.consulta_alunos.service.BackupArquivo;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +21,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainController {
+
+    private BackupArquivo backupService = new BackupArquivo();
 
     @FXML private TableView<AlunoHistorico> tabelaAlunos;
     @FXML private TableColumn<AlunoHistorico, String> colNome;
@@ -89,6 +92,10 @@ public class MainController {
 
     private void carregarDadosExcel(File arquivo) {
         try {
+
+            String caminhoBackup = backupService.fazerBackup(arquivo.getAbsolutePath());
+            System.out.println("Backup criado: " + caminhoBackup);
+
             List<AlunoHistorico> alunos = service.carregarAlunosDeArquivo(arquivo.getAbsolutePath());
             listaOriginal.setAll(alunos);
             tabelaAlunos.setItems(listaOriginal);
