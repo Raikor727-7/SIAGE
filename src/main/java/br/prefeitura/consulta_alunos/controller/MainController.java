@@ -2,8 +2,6 @@ package br.prefeitura.consulta_alunos.controller;
 
 import br.prefeitura.consulta_alunos.model.AlunoHistorico;
 import br.prefeitura.consulta_alunos.service.AlunoHistoricoService;
-import br.prefeitura.consulta_alunos.service.OrganizadorArquivos;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -214,19 +212,6 @@ public class MainController {
     }
 
     // Mantendo os métodos existentes para compatibilidade
-    @FXML
-    private void organizarArquivos() {
-        DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle("Selecione a pasta para organizar");
-        File pasta = chooser.showDialog(new Stage());
-
-        if (pasta != null) {
-            OrganizadorArquivos organizador = new OrganizadorArquivos();
-            organizador.organizarPasta(pasta.getAbsolutePath());
-
-            new Alert(Alert.AlertType.INFORMATION, "Organização concluída! Verifique o relatório na pasta.").show();
-        }
-    }
 
     @FXML
     private void abrirControleCaixas() {
