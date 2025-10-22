@@ -1,8 +1,10 @@
 package br.prefeitura.consulta_alunos.controller;
 
 import br.prefeitura.consulta_alunos.model.AlunoHistorico;
+import br.prefeitura.consulta_alunos.model.Declaracao;
 import br.prefeitura.consulta_alunos.service.AlunoHistoricoService;
 import br.prefeitura.consulta_alunos.service.BackupArquivo;
+import br.prefeitura.consulta_alunos.service.DeclaracaoService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,10 +12,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.Period;
@@ -187,22 +193,172 @@ public class MainController {
 
     private void abrirDetalhesAluno(AlunoHistorico aluno) {
         try {
-            // Criar uma janela simples com os detalhes do aluno histórico
             Stage stage = new Stage();
             stage.setTitle("Detalhes do Aluno - " + aluno.getNome());
 
+            VBox vbox = new VBox(10);
+            vbox.setPadding(new javafx.geometry.Insets(15));
+
+            // Área de texto com detalhes
             TextArea textArea = new TextArea();
             textArea.setEditable(false);
             textArea.setWrapText(true);
             textArea.setText(gerarDetalhesAluno(aluno));
+            textArea.setPrefHeight(300);
 
-            Scene scene = new Scene(new ScrollPane(textArea), 500, 400);
+            // Botão para gerar declaração
+            Button btnGerarDeclaracao = new Button("📄 Gerar Declaração");
+            btnGerarDeclaracao.setStyle("-fx-font-size: 14px; -fx-padding: 10px;");
+            btnGerarDeclaracao.setOnAction(e -> abrirFormularioDeclaracao(aluno));
+
+            vbox.getChildren().addAll(
+                    new Label("DETALHES DO ALUNO:"),
+                    textArea,
+                    btnGerarDeclaracao
+            );
+
+            Scene scene = new Scene(vbox, 500, 450);
             stage.setScene(scene);
             stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
             mostrarErro("Erro ao abrir detalhes do aluno");
+        }
+    }
+
+    private void abrirFormularioDeclaracao(AlunoHistorico aluno) {
+        try {
+            Stage stage = new Stage();
+            stage.setTitle("Gerar Declaração - " + aluno.getNome());
+
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new javafx.geometry.Insets(20));
+
+            // Campos do formulário
+            TextField campoPai = new TextField();
+            campoPai.setPromptText("Nome completo do pai");
+
+            TextField campoMae = new TextField();
+            campoMae.setPromptText("Nome completo da mãe");
+
+            // USAR DatePicker EM VEZ DE DataField
+            DatePicker campoDataNascimento = new DatePicker();
+            campoDataNascimento.setPromptText("Data de nascimento");
+
+            // Preencher com a data do aluno se existir
+            if (aluno.getDataNascimento() != null) {
+                campoDataNascimento.setValue(aluno.getDataNascimento());
+            }
+
+            TextField campoAno = new TextField();
+            campoAno.setPromptText("Ex: 2024");
+
+            TextField campoSerie = new TextField();
+            campoSerie.setPromptText("Ex: 5ª série");
+
+            // Adicionar ao grid
+            grid.add(new Label("Aluno: " + aluno.getNome()), 0, 0, 2, 1);
+            grid.add(new Label("Pai:"), 0, 1);
+            grid.add(campoPai, 1, 1);
+            grid.add(new Label("Mãe:"), 0, 2);
+            grid.add(campoMae, 1, 2);
+            grid.add(new Label("Data Nascimento:"), 0, 3);
+            grid.add(campoDataNascimento, 1, 3);
+            grid.add(new Label("Ano:"), 0, 4);
+            grid.add(campoAno, 1, 4);
+            grid.add(new Label("Série:"), 0, 5);
+            grid.add(campoSerie, 1, 5);
+
+            // Botões
+            Button btnGerar = new Button("Gerar Declaração");
+            Button btnCancelar = new Button("Cancelar");
+
+            HBox botoes = new HBox(10, btnGerar, btnCancelar);
+            botoes.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+
+            grid.add(botoes, 0, 6, 2, 1);
+
+            // Ações dos botões
+            btnGerar.setOnAction(e -> {
+                if (validarFormulario(campoAno, campoPai, campoMae, campoSerie)) {
+                    try {
+                        Declaracao declaracao = new Declaracao(
+                                aluno.getNome(),
+                                campoDataNascimento.getValue(), // Pode ser null
+                                campoPai.getText().trim(),
+                                campoMae.getText().trim(),
+                                Integer.parseInt(campoAno.getText().trim()),
+                                campoSerie.getText().trim()
+                        );
+
+                        gerarDocumentoDeclaracao(declaracao);
+                        stage.close();
+
+                    } catch (NumberFormatException ex) {
+                        mostrarErro("Ano deve ser um número válido!");
+                    }
+                }
+            });
+
+            btnCancelar.setOnAction(e -> stage.close());
+
+            Scene scene = new Scene(grid);
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarErro("Erro ao abrir formulário de declaração");
+        }
+    }
+
+    private boolean validarFormulario(TextField campoAno, TextField... outrosCampos) {
+        // Validar ano (deve ser número)
+        try {
+            Integer.parseInt(campoAno.getText().trim());
+        } catch (NumberFormatException e) {
+            mostrarErro("Ano deve ser um número válido!");
+            return false;
+        }
+
+        // Validar outros campos (não podem estar vazios)
+        for (TextField campo : outrosCampos) {
+            if (campo.getText().trim().isEmpty()) {
+                mostrarErro("Todos os campos são obrigatórios!");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void gerarDocumentoDeclaracao(Declaracao declaracao) {
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Salvar Declaração");
+            fileChooser.setInitialFileName("declaracao_" + declaracao.getNome().replace(" ", "_") + ".docx");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Documentos Word", "*.docx")
+            );
+
+            File arquivo = fileChooser.showSaveDialog(null);
+            if (arquivo != null) {
+                DeclaracaoService service = new DeclaracaoService();
+                service.gerarDeclaracaoWord(declaracao, arquivo.getAbsolutePath());
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Declaração Gerada");
+                alert.setHeaderText(null);
+                alert.setContentText("Declaração gerada com sucesso!\n\nArquivo: " + arquivo.getName());
+                alert.showAndWait();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarErro("Erro ao gerar declaração: " + e.getMessage());
         }
     }
 

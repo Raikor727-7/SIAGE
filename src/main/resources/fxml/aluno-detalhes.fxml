@@ -2,7 +2,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="br.prefeitura.consulta_alunos.controller.AlunoDetalhesController" style="-fx-padding: 15;">
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="br.prefeitura.consulta_alunos.controller.AlunoDetalhesController" style="-fx-padding: 15;"
+      xmlns:th="http://www.w3.org/1999/xhtml">
     <Label text="Boletim Escolar" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
 
     <GridPane hgap="10" vgap="8">
@@ -30,6 +32,19 @@
             <TableColumn fx:id="colSituacao" text="Situação" prefWidth="120"/>
         </columns>
     </TableView>
+
+    <form action="/alunos/gerar-declaracao" method="post">
+        <input type="hidden" name="alunoId" th:value="${aluno.id}">
+        <label>Pai:</label>
+        <input type="text" name="pai" required>
+        <label>Mãe:</label>
+        <input type="text" name="mae" required>
+        <label>Ano:</label>
+        <input type="number" name="ano" required>
+        <label>Série:</label>
+        <input type="text" name="serie" required>
+        <button type="submit">Gerar Declaração</button>
+    </form>
 
     <Button text="Fechar" onAction="#fecharJanela" alignment="CENTER"/>
 </VBox>
